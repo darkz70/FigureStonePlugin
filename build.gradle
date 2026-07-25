@@ -91,6 +91,8 @@ modules.forEach {module ->
 		}
 	}
 
+	def ghUser = System.getenv('GITHUB_ACTOR') ?: moduleProject.findProperty('gpr.user')
+	def ghToken = System.getenv('GITHUB_TOKEN') ?: moduleProject.findProperty('gpr.key')
 	moduleProject.publishing {
 		repositories {
 			mavenLocal()
@@ -98,16 +100,16 @@ modules.forEach {module ->
 				name = 'GitHubPackagesReleases'
 				url = uri('https://maven.pkg.github.com/darkz70/FigureStonePlugin')
 				credentials {
-					username = System.getenv('GITHUB_ACTOR') ?: findProperty('gpr.user')
-					password = System.getenv('GITHUB_TOKEN') ?: findProperty('gpr.key')
+					username = ghUser
+					password = ghToken
 				}
 			}
 			maven {
 				name = 'GitHubPackagesSnapshots'
 				url = uri('https://maven.pkg.github.com/darkz70/FigureStonePlugin')
 				credentials {
-					username = System.getenv('GITHUB_ACTOR') ?: findProperty('gpr.user')
-					password = System.getenv('GITHUB_TOKEN') ?: findProperty('gpr.key')
+					username = ghUser
+					password = ghToken
 				}
 			}
 		}

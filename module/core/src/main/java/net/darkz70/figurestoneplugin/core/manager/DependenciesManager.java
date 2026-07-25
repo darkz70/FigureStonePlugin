@@ -104,7 +104,15 @@ public class DependenciesManager {
 		addRepository(project, "Minecraft libraries", "https://libraries.minecraft.net");
 		addRepository(project, "Quilt", "https://maven.quiltmc.org/repository/release/");
 		addRepository(project, "Sonatype", "https://oss.sonatype.org/content/repositories/snapshots/");
-		addRepository(project, "Terraformers", "https://maven.terraformersmc.com/");
+		addRepository(project, "Terraformers", "https://maven.terraformersmc.com/", (repository) -> {
+			project.getRepositories().exclusiveContent((content) -> {
+				content.forRepositories(repository);
+				@SuppressWarnings("all")
+				ExclusiveContentRepository filter = content.filter((descriptor) -> {
+					descriptor.includeGroupAndSubgroups("com.terraformersmc");
+				});
+			});
+		});
 		addRepository(project, "YACL", "https://maven.isxander.dev/releases");
 		addRepository(project, "Nucleoid", "https://maven.nucleoid.xyz/");
 		addRepository(project, "Modrinth", "https://api.modrinth.com/maven", (repository) -> {
