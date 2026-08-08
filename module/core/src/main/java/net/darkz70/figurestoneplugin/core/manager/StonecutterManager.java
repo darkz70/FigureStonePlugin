@@ -41,12 +41,14 @@ public class StonecutterManager {
 		});
 
 		stonecutter.replacements((container) -> {
-			container.string((spec) -> {
-				spec.getDirection().set(stonecutter.getCurrent().getParsed().matches(">=1.21.11"));
-				spec.replace("ResourceLocation", "Identifier");
-				spec.replace(".location()", ".identifier()");
-				spec.replace("::location", "::identifier");
-			});
+			if (!project.getName().startsWith("fabric")) {
+				container.string((spec) -> {
+					spec.getDirection().set(stonecutter.getCurrent().getParsed().matches(">=1.21.11"));
+					spec.replace("ResourceLocation", "Identifier");
+					spec.replace(".location()", ".identifier()");
+					spec.replace("::location", "::identifier");
+				});
+			}
 
 			container.string((spec) -> {
 				spec.getDirection().set(stonecutter.getCurrent().getProject().contains("forge"));
