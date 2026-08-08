@@ -11,6 +11,9 @@ public class FigureStoneCoreDependenciesExtension {
 	String minecraft;
 
 	@Input
+	String yarn;
+
+	@Input
 	String fabricApi;
 
 	@Input
