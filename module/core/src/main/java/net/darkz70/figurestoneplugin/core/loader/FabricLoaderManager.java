@@ -38,6 +38,7 @@ public class FabricLoaderManager implements LoaderManager {
 	public void applyDependencies(@NotNull FigureStoneProjectConfigurationData data, FigureStoneCoreDependenciesExtension extension) {
 		Project project = data.project();
 		String minecraft = extension.getMinecraft();
+		String yarn = extension.getYarn();
 		String fabricApi = extension.getFabricApi();
 		String fabricLoader = extension.getFabricLoader();
 
@@ -45,6 +46,8 @@ public class FabricLoaderManager implements LoaderManager {
 		dependencies.add("minecraft", "com.mojang:minecraft:%s".formatted(minecraft));
 
 		if (isRemapVersion(data)) {
+			dependencies.add("mappings", "net.fabricmc:yarn:%s:v2".formatted(yarn));
+		} else {
 			dependencies.add("mappings", ((LoomGradleExtensionAPI) project.getExtensions().getByName("loom")).officialMojangMappings());
 		}
 
@@ -119,4 +122,4 @@ public class FabricLoaderManager implements LoaderManager {
 		}
 		return map;
 	}
-}
+	}
