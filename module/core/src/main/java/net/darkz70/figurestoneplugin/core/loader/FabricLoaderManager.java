@@ -47,9 +47,11 @@ public class FabricLoaderManager implements LoaderManager {
 
 		if (isRemapVersion(data)) {
 			dependencies.add("mappings", "net.fabricmc:yarn:%s:v2".formatted(yarn));
-		} else {
-			dependencies.add("mappings", ((LoomGradleExtensionAPI) project.getExtensions().getByName("loom")).officialMojangMappings());
 		}
+		// For unobfuscated versions (>=26.1), Loom does not accept an explicit "mappings"
+		// dependency at all - the game jar already ships with human-readable names,
+		// so no mapping/remapping step exists. Adding one throws:
+		// "Cannot use Mojang mappings in a non-obfuscated environment"
 
 		dependencies.add(this.getModDependenciesImplementationMethod(data), "net.fabricmc.fabric-api:fabric-api:%s".formatted(fabricApi));
 		dependencies.add(this.getModDependenciesImplementationMethod(data), "net.fabricmc:fabric-loader:%s".formatted(fabricLoader));
@@ -122,4 +124,4 @@ public class FabricLoaderManager implements LoaderManager {
 		}
 		return map;
 	}
-	}
+}
