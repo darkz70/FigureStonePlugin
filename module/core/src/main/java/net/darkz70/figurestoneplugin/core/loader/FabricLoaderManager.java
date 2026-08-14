@@ -45,9 +45,9 @@ public class FabricLoaderManager implements LoaderManager {
 		DependencyHandler dependencies = project.getDependencies();
 		dependencies.add("minecraft", "com.mojang:minecraft:%s".formatted(minecraft));
 
-		if (isRemapVersion(data)) {
-			dependencies.add("mappings", "net.fabricmc:yarn:%s:v2".formatted(yarn));
-		}
+			if (isRemapVersion(data) && !useOfficialMojangMappings(project)) {
+				dependencies.add("mappings", "net.fabricmc:yarn:%s:v2".formatted(yarn));
+			}
 		// For unobfuscated versions (>=26.1), Loom does not accept an explicit "mappings"
 		// dependency at all - the game jar already ships with human-readable names,
 		// so no mapping/remapping step exists. Adding one throws:
@@ -61,8 +61,11 @@ public class FabricLoaderManager implements LoaderManager {
 	public void configureExtensions(@NotNull FigureStoneProjectConfigurationData data) {
 		Project project = data.project();
 		project.getExtensions().configure(LoomGradleExtensionAPI.class, (loom) -> {
-			LoomManager.apply(data, loom);
-		});
+				if (useOfficialMojangMappings(project) && isRemapVersion(data)) {
+					loom.officialMojangMappings();
+				}
+				LoomManager.apply(data, loom);
+			});
 	}
 
 	@Override
@@ -96,6 +99,11 @@ public class FabricLoaderManager implements LoaderManager {
 			return true;
 		}
 		return false;
+	}
+
+	private static boolean useOfficialMojangMappings(Project project) {
+		Object value = project.findProperty("build.fabric_mappings");
+		return value != null && value.toString().equalsIgnoreCase("official");
 	}
 
 	private static boolean isRemapVersion(FigureStoneProjectConfigurationData data) {

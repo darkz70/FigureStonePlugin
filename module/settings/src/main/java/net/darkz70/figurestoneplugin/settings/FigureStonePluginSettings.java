@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 @Getter
 public class FigureStonePluginSettings implements Plugin<Settings> {
 
-	public static final String PLUGIN_VERSION = "3.7.0-beta.19";
+	public static final String PLUGIN_VERSION = "1.3.4";
 
 	public static final FigureStoneLogger LOGGER = new FigureStoneLogger("Settings");
 
