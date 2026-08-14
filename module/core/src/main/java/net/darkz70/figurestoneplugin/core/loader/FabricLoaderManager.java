@@ -62,7 +62,7 @@ public class FabricLoaderManager implements LoaderManager {
 		Project project = data.project();
 		project.getExtensions().configure(LoomGradleExtensionAPI.class, (loom) -> {
 				if (useOfficialMojangMappings(project) && isRemapVersion(data)) {
-					loom.officialMojangMappings();
+					project.getDependencies().add("mappings", loom.officialMojangMappings());
 				}
 				LoomManager.apply(data, loom);
 			});
